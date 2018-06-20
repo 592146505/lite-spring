@@ -3,10 +3,11 @@ package com.roamer.litespring.test.v1;
 import com.roamer.litespring.beans.BeanDefinition;
 import com.roamer.litespring.beans.factory.BeanCreationException;
 import com.roamer.litespring.beans.factory.BeanDefinitionStoreException;
-import com.roamer.litespring.beans.factory.BeanFactory;
 import com.roamer.litespring.beans.factory.support.DefaultBeanFactory;
 import com.roamer.litespring.beans.factory.xml.XmlBeanDefinitionReader;
 import com.roamer.litespring.service.v1.PetStoreService;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -19,13 +20,25 @@ import static org.junit.Assert.*;
  * @date 2018/6/20 13:00
  */
 public class BeanFactoryTest {
+    private DefaultBeanFactory factory = null;
+    private XmlBeanDefinitionReader reader = null;
+
+    @Before
+    public void setUp() throws Exception {
+        // 创建
+        factory = new DefaultBeanFactory();
+        // 创建XmlBeanDefinitionReader用于解析XML
+        reader = new XmlBeanDefinitionReader(factory);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        factory = null;
+        reader = null;
+    }
 
     @Test
     public void getBean() {
-        // 创建Bean工厂
-        DefaultBeanFactory factory = new DefaultBeanFactory();
-        // 解析xml
-        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
         reader.loadBeanDefinition("petstore-v1.xml");
         // 查找BeanDefinition
         BeanDefinition db = factory.getBeanDefinition("petStore");
@@ -38,10 +51,6 @@ public class BeanFactoryTest {
 
     @Test(expected = BeanCreationException.class)
     public void invalidBean() {
-        // 创建Bean工厂
-        DefaultBeanFactory factory = new DefaultBeanFactory();
-        // 解析xml
-        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
         reader.loadBeanDefinition("petstore-v1.xml");
         //获取Bean
         factory.getBean("invalidBean");
@@ -49,10 +58,6 @@ public class BeanFactoryTest {
 
     @Test(expected = BeanDefinitionStoreException.class)
     public void invalidXML() {
-        // 创建Bean工厂
-        DefaultBeanFactory factory = new DefaultBeanFactory();
-        // 解析xml
-        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
         reader.loadBeanDefinition("***-v1.xml");
     }
 }
