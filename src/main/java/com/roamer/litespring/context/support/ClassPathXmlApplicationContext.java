@@ -5,6 +5,8 @@ import com.roamer.litespring.beans.factory.xml.XmlBeanDefinitionReader;
 import com.roamer.litespring.context.ApplicationContext;
 
 /**
+ * 类路径下XML ApplicationContext实现
+ *
  * @author roamer
  * @version V1.0
  * @date 2018/6/21 10:12
