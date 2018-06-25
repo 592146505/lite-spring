@@ -4,17 +4,14 @@ import com.roamer.litespring.beans.BeanDefinition;
 import com.roamer.litespring.beans.factory.BeanDefinitionStoreException;
 import com.roamer.litespring.beans.factory.support.BeanDefinitionRegistry;
 import com.roamer.litespring.beans.factory.support.GenericBeanDefinition;
-import com.roamer.litespring.util.AbstractClassUtils;
+import com.roamer.litespring.core.io.Resource;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 解析XML获取BeanDefinition
@@ -40,14 +37,13 @@ public class XmlBeanDefinitionReader {
     /**
      * 加载XML文件注册BeanDefinition
      *
-     * @param configFile
+     * @param resource
      */
-    public void loadBeanDefinition(String configFile) {
+    public void loadBeanDefinition(Resource resource) {
         InputStream is = null;
         try {
-            // 获取类加载器，加载XML文件
-            ClassLoader cl = AbstractClassUtils.getDefaultClassLoader();
-            is = cl.getResourceAsStream(configFile);
+            //获取资源输入流
+            is = resource.getInputStream();
             SAXReader reader = new SAXReader();
             Document doc = reader.read(is);
 
@@ -63,8 +59,8 @@ public class XmlBeanDefinitionReader {
                 BeanDefinition bd = new GenericBeanDefinition(id, beanClassName);
                 this.registry.registerBeanDefinition(id, bd);
             }
-        } catch (DocumentException e) {
-            throw new BeanDefinitionStoreException("IOException parsing XML document from " + configFile, e);
+        } catch (Exception e) {
+            throw new BeanDefinitionStoreException("IOException parsing XML document from " + resource.getDescription(), e);
         } finally {
             if (is != null) {
                 try {

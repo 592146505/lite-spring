@@ -3,7 +3,7 @@ package com.roamer.litespring.beans.factory.support;
 import com.roamer.litespring.beans.BeanDefinition;
 import com.roamer.litespring.beans.factory.BeanCreationException;
 import com.roamer.litespring.beans.factory.BeanFactory;
-import com.roamer.litespring.util.AbstractClassUtils;
+import com.roamer.litespring.util.ClassUtils;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,10 +31,10 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry {
     @Override
     public Object getBean(String beanId) {
         BeanDefinition bd = this.getBeanDefinition(beanId);
-        if (null == bd) {
+        if (bd == null) {
             return null;
         }
-        ClassLoader cl = AbstractClassUtils.getDefaultClassLoader();
+        ClassLoader cl = ClassUtils.getDefaultClassLoader();
         String beanClassName = bd.getBeanClassName();
         try {
             // 反射获取类

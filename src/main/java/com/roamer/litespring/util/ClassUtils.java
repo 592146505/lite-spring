@@ -8,7 +8,7 @@ package com.roamer.litespring.util;
  * @version V1.0
  * @date 2018/6/20 13:18
  */
-public abstract class AbstractClassUtils {
+public abstract class ClassUtils {
     /**
      * 获取 Default ClassLoader
      *
@@ -25,7 +25,7 @@ public abstract class AbstractClassUtils {
         if (cl == null) {
             // No thread context class loader -> use class loader of this class.
             //获取当前类加载器
-            cl = AbstractClassUtils.class.getClassLoader();
+            cl = ClassUtils.class.getClassLoader();
             if (cl == null) {
                 // getClassLoader() returning null indicates the bootstrap ClassLoader
                 try {

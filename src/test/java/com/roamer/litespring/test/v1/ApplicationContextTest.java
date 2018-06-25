@@ -2,6 +2,7 @@ package com.roamer.litespring.test.v1;
 
 import com.roamer.litespring.context.ApplicationContext;
 import com.roamer.litespring.context.support.ClassPathXmlApplicationContext;
+import com.roamer.litespring.context.support.FileSystemXmlApplicationContext;
 import com.roamer.litespring.service.v1.PetStoreService;
 import org.junit.Test;
 
@@ -17,9 +18,17 @@ import static org.junit.Assert.*;
 public class ApplicationContextTest {
 
     @Test
-    public void getBean() {
+    public void classPathXmlApplicationContext() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("petstore-v1.xml");
         PetStoreService petStoreService = (PetStoreService) ctx.getBean("petStore");
         assertNotNull(petStoreService);
     }
+
+    @Test
+    public void fileSystemXmlApplicationContext() {
+        ApplicationContext ctx = new FileSystemXmlApplicationContext("src\\test\\resources\\petstore-v1.xml");
+        PetStoreService petStoreService = (PetStoreService) ctx.getBean("petStore");
+        assertNotNull(petStoreService);
+    }
+
 }
