@@ -21,6 +21,7 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
 
     public AbstractApplicationContext(String configFile) {
         factory = new DefaultBeanFactory();
+        factory.setClassLoader(getClassLoader());
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
         Resource resource = getResourceByPath(configFile);
         reader.loadBeanDefinition(resource);
