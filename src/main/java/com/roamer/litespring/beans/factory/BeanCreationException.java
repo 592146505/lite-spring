@@ -32,7 +32,7 @@ public class BeanCreationException extends BeansException {
     }
 
     public String getBeanName() {
-        return this.beanName;
+        return beanName;
     }
 
 

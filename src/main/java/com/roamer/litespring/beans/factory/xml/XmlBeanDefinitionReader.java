@@ -57,7 +57,7 @@ public class XmlBeanDefinitionReader {
                 String beanClassName = el.attributeValue(CLASS_ATTRIBUTE);
                 // 封装为beanDefinition
                 BeanDefinition bd = new GenericBeanDefinition(id, beanClassName);
-                this.registry.registerBeanDefinition(id, bd);
+                registry.registerBeanDefinition(id, bd);
             }
         } catch (Exception e) {
             throw new BeanDefinitionStoreException("IOException parsing XML document from " + resource.getDescription(), e);

@@ -18,7 +18,7 @@ public class ClassPathXmlApplicationContext extends AbstractApplicationContext {
 
     @Override
     public Resource getResourceByPath(String path) {
-        return new ClassPathResource(path);
+        return new ClassPathResource(path, getClassLoader());
     }
 
 }

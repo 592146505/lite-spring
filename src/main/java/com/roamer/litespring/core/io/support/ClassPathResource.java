@@ -33,16 +33,16 @@ public class ClassPathResource implements Resource {
     @Override
     public InputStream getInputStream() throws IOException {
         // 通过classLoader获取资源输入流
-        InputStream is = this.classLoader.getResourceAsStream(this.path);
+        InputStream is = classLoader.getResourceAsStream(path);
         if (is == null) {
-            throw new FileNotFoundException(this.path + " cannot be opened");
+            throw new FileNotFoundException(path + " cannot be opened");
         }
         return is;
     }
 
     @Override
     public String getDescription() {
-        return this.path;
+        return path;
     }
 
 }

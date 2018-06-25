@@ -4,6 +4,7 @@ import com.roamer.litespring.beans.factory.support.DefaultBeanFactory;
 import com.roamer.litespring.beans.factory.xml.XmlBeanDefinitionReader;
 import com.roamer.litespring.context.ApplicationContext;
 import com.roamer.litespring.core.io.Resource;
+import com.roamer.litespring.util.ClassUtils;
 
 /**
  * ApplicationContext抽象
@@ -14,10 +15,12 @@ import com.roamer.litespring.core.io.Resource;
  */
 public abstract class AbstractApplicationContext implements ApplicationContext {
 
-    protected DefaultBeanFactory factory;
+    private ClassLoader classLoader;
+
+    private DefaultBeanFactory factory;
 
     public AbstractApplicationContext(String configFile) {
-        this.factory = new DefaultBeanFactory();
+        factory = new DefaultBeanFactory();
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
         Resource resource = getResourceByPath(configFile);
         reader.loadBeanDefinition(resource);
@@ -25,7 +28,7 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
 
     @Override
     public Object getBean(String beanId) {
-        return this.factory.getBean(beanId);
+        return factory.getBean(beanId);
     }
 
     /**
@@ -35,5 +38,15 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
      * @return
      */
     public abstract Resource getResourceByPath(String path);
+
+    @Override
+    public void setClassLoader(ClassLoader classLoader) {
+        this.classLoader = classLoader;
+    }
+
+    @Override
+    public ClassLoader getClassLoader() {
+        return classLoader != null ? classLoader : ClassUtils.getDefaultClassLoader();
+    }
 
 }

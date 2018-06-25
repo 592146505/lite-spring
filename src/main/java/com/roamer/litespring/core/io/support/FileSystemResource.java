@@ -18,17 +18,17 @@ public class FileSystemResource implements Resource {
 
     public FileSystemResource(String path) {
         Assert.notNull(path, "Path must not be null");
-        this.file = new File(path);
+        file = new File(path);
     }
 
 
     @Override
     public InputStream getInputStream() throws IOException {
-        return new FileInputStream(this.file);
+        return new FileInputStream(file);
     }
 
     @Override
     public String getDescription() {
-        return "file [" + this.file.getAbsolutePath() + "]";
+        return "file [" + file.getAbsolutePath() + "]";
     }
 }
