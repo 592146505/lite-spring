@@ -57,6 +57,10 @@ public class XmlBeanDefinitionReader {
                 String beanClassName = el.attributeValue(CLASS_ATTRIBUTE);
                 // 封装为beanDefinition
                 BeanDefinition bd = new GenericBeanDefinition(id, beanClassName);
+                // 设置scope属性
+                if (el.attributeValue(SCOPE_ATTRIBUTE) != null) {
+                    bd.setScope(el.attributeValue(SCOPE_ATTRIBUTE));
+                }
                 registry.registerBeanDefinition(id, bd);
             }
         } catch (Exception e) {
