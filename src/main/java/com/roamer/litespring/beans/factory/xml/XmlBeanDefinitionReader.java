@@ -1,10 +1,16 @@
 package com.roamer.litespring.beans.factory.xml;
 
 import com.roamer.litespring.beans.BeanDefinition;
+import com.roamer.litespring.beans.PropertyValue;
 import com.roamer.litespring.beans.factory.BeanDefinitionStoreException;
+import com.roamer.litespring.beans.factory.config.RuntimeBeanReference;
+import com.roamer.litespring.beans.factory.config.TypeStringValue;
 import com.roamer.litespring.beans.factory.support.BeanDefinitionRegistry;
 import com.roamer.litespring.beans.factory.support.GenericBeanDefinition;
 import com.roamer.litespring.core.io.Resource;
+import com.roamer.litespring.util.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -22,11 +28,21 @@ import java.util.Iterator;
  */
 public class XmlBeanDefinitionReader {
 
+    private static Log logger = LogFactory.getLog(XmlBeanDefinitionReader.class);
+
     public static final String ID_ATTRIBUTE = "id";
 
     public static final String CLASS_ATTRIBUTE = "class";
 
     public static final String SCOPE_ATTRIBUTE = "scope";
+
+    public static final String PROPERRY_ELEMENT = "property";
+
+    public static final String NAME_ATTRIBUTE = "name";
+
+    public static final String REF_ATTRIBUTE = "ref";
+
+    public static final String VALUE_ATTRIBUTE = "value";
 
     BeanDefinitionRegistry registry;
 
@@ -61,6 +77,7 @@ public class XmlBeanDefinitionReader {
                 if (el.attributeValue(SCOPE_ATTRIBUTE) != null) {
                     bd.setScope(el.attributeValue(SCOPE_ATTRIBUTE));
                 }
+                parsePropertyElement(el, bd);
                 registry.registerBeanDefinition(id, bd);
             }
         } catch (Exception e) {
@@ -75,4 +92,68 @@ public class XmlBeanDefinitionReader {
             }
         }
     }
+
+    /**
+     * 解析bean property标签
+     *
+     * @param beanElement
+     * @param bd
+     */
+    public void parsePropertyElement(Element beanElement, BeanDefinition bd) {
+        Iterator<Element> iterator = beanElement.elementIterator();
+        while (iterator.hasNext()) {
+            // property标签
+            Element propertyElement = iterator.next();
+            // 标签name属性，对应实体中的字段名
+            String propertyName = propertyElement.attributeValue(NAME_ATTRIBUTE);
+            // 字段不能有空格，所以使用hasText函数
+            if (!StringUtils.hasText(propertyName)) {
+                logger.fatal("Tag 'property' must have a 'name' attribute");
+                return;
+            }
+            // 解析property标签属性
+            Object value = parsePropertyValue(propertyElement, bd, propertyName);
+            PropertyValue propertyValue = new PropertyValue(propertyName, value);
+            // 放置于BeanDefinition中
+            bd.getPropertyValues().add(propertyValue);
+        }
+    }
+
+    /**
+     * 解析property标签属性
+     *
+     * @param propertyElement
+     * @param bd
+     * @param propertyName
+     * @return
+     */
+    public Object parsePropertyValue(Element propertyElement, BeanDefinition bd, String propertyName) {
+        String elementName = (propertyName != null) ?
+                "<property> element for property '" + propertyName + "'" :
+                "<constructor-arg> element";
+
+        boolean hasRefAttribute = propertyElement.attributeValue(REF_ATTRIBUTE) != null;
+        boolean hasValueAttribute = propertyElement.attributeValue(VALUE_ATTRIBUTE) != null;
+
+        if (hasRefAttribute) {
+            // 引用类型
+            // property标签ref属性，用于在Bean容器中查找Bean
+            String refName = propertyElement.attributeValue(REF_ATTRIBUTE);
+            if (!StringUtils.hasText(refName)) {
+                logger.error(elementName + " contains empty 'ref' attribute");
+            }
+            RuntimeBeanReference ref = new RuntimeBeanReference(refName);
+            return ref;
+        } else if (hasValueAttribute) {
+            // 字符型
+            // property标签value属性，用于赋值Bean属性
+            String value = propertyElement.attributeValue(VALUE_ATTRIBUTE);
+            return new TypeStringValue(value);
+        } else {
+            // 未实现的功能抛出异常
+            throw new RuntimeException(elementName + "must specify a ref or value");
+        }
+    }
+
+
 }

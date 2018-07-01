@@ -1,5 +1,7 @@
 package com.roamer.litespring.beans;
 
+import java.util.List;
+
 /**
  * BeanDefinition接口
  *
@@ -49,4 +51,11 @@ public interface BeanDefinition {
      * @param scope
      */
     void setScope(String scope);
+
+    /**
+     * 获取Bean Property
+     *
+     * @return
+     */
+    List<PropertyValue> getPropertyValues();
 }

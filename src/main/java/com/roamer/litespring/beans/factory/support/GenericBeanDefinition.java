@@ -1,6 +1,10 @@
 package com.roamer.litespring.beans.factory.support;
 
 import com.roamer.litespring.beans.BeanDefinition;
+import com.roamer.litespring.beans.PropertyValue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 通用BeanDefinition
@@ -20,6 +24,8 @@ public class GenericBeanDefinition implements BeanDefinition {
     private boolean singleton = true;
 
     private boolean prototype = false;
+
+    List<PropertyValue> propertyValues = new ArrayList<>();
 
     public GenericBeanDefinition(String id, String beanClassName) {
         this.id = id;
@@ -51,6 +57,11 @@ public class GenericBeanDefinition implements BeanDefinition {
         this.scope = scope;
         this.singleton = SCOPE_SINGLETON.equals(scope) || SCOPE_DEFAULT.equals(scope);
         this.prototype = SCOPE_PROTOTYPE.equals(scope);
+    }
+
+    @Override
+    public List<PropertyValue> getPropertyValues() {
+        return propertyValues;
     }
 
 }
