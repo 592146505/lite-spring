@@ -8,13 +8,8 @@
           class="com.roamer.litespring.service.v2.PetStoreService">
         <property name="accountDao" ref="accountDao"/>
         <property name="itemDao" ref="itemDao"/>
-    </bean>
-
-    <bean id="petStore1"
-          class="com.roamer.litespring.service.v2.PetStoreService1">
-        <property name="accountDao" ref="accountDao"/>
-        <property name="itemDao" ref="itemDao"/>
         <property name="owner" value="roamer"/>
+        <property name="version" value="1"/>
     </bean>
 
     <bean id="accountDao" class="com.roamer.litespring.dao.v2.AccountDao">

@@ -1,10 +1,10 @@
-package com.roamer.litespring.test.v2;
+package com.roamer.litespring.test.v1;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 /**
- * v2版集中测试类
+ * v1版集中测试类
  *
  * @author roamer
  * @version V1.0
@@ -12,9 +12,9 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        BeanFactoryTest.class,
         ApplicationContextTest.class,
-        BeanDefinitionTest.class,
-        BeanDefinitionResolverTest.class
+        ResourceTest.class,
 })
-public class V2AllTest {
+public class V1AllTests {
 }
