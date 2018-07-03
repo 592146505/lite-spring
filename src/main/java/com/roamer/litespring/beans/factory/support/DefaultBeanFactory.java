@@ -1,10 +1,16 @@
 package com.roamer.litespring.beans.factory.support;
 
 import com.roamer.litespring.beans.BeanDefinition;
+import com.roamer.litespring.beans.PropertyValue;
 import com.roamer.litespring.beans.factory.BeanCreationException;
 import com.roamer.litespring.beans.factory.config.ConfigurableBeanFactory;
 import com.roamer.litespring.util.ClassUtils;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.MethodDescriptor;
+import java.beans.PropertyDescriptor;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -51,6 +57,20 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
     }
 
     private Object createBean(BeanDefinition bd) {
+        // 创建Bean实例
+        Object bean = instantiateBean(bd);
+        // 设置Bean属性
+        populateBean(bd, bean);
+        return bean;
+    }
+
+    /**
+     * 根据Bean定义创建Bean
+     *
+     * @param bd
+     * @return
+     */
+    private Object instantiateBean(BeanDefinition bd) {
         ClassLoader cl = getClassLoader();
         String beanClassName = bd.getBeanClassName();
         try {
@@ -59,6 +79,43 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
             return clz.newInstance();
         } catch (Exception e) {
             throw new BeanCreationException("create bean for " + beanClassName + " failed", e);
+        }
+    }
+
+
+    /**
+     * 设置Bean字段
+     *
+     * @param bd
+     * @param bean
+     */
+    private void populateBean(BeanDefinition bd, Object bean) {
+        List<PropertyValue> values = bd.getPropertyValues();
+        if (values == null || values.isEmpty()) {
+            return;
+        }
+
+        BeanDefinitionValueResolver resolver = new BeanDefinitionValueResolver(this);
+        try {
+            // 获取BeanInfo
+            BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
+            // 获取属性描述符
+            PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
+            for (PropertyValue pv : values) {
+                String propertyName = pv.getName();
+                Object originalValue = pv.getValue();
+                // 得到转换后的Bean
+                Object resolvedValue = resolver.resolveValueIfNecessary(originalValue);
+                // 循环调用属性的set方法
+                for (PropertyDescriptor pd : pds) {
+                    if (propertyName.equals(pd.getName())) {
+                        pd.getWriteMethod().invoke(bean, resolvedValue);
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            throw new BeanCreationException("Failed to obtain BeanInfo for class [" + bean.getClass() + "]", e);
         }
     }
 

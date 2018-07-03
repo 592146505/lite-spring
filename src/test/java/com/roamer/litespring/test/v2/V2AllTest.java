@@ -12,8 +12,9 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        ApplicationContextTest.class,
         BeanDefinitionTest.class,
-        BeanDefinitionResolverTest.class,
+        BeanDefinitionResolverTest.class
 })
 public class V2AllTest {
 }
