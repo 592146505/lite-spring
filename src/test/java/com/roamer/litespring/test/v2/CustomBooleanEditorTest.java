@@ -21,68 +21,31 @@ public class CustomBooleanEditorTest {
         // 创建数字类型转换器,将String值转换为Boolean类型，可以为空字符(返回null)
         CustomBooleanEditor editor = new CustomBooleanEditor(true);
 
-        editor.setAsText("true");
-        {
-            Object value = editor.getValue();
-            assertTrue(value instanceof Boolean);
-            assertTrue((Boolean) value);
-        }
-
-        editor.setAsText("false");
-        {
-            Object value = editor.getValue();
-            assertTrue(value instanceof Boolean);
-            assertFalse((Boolean) value);
-        }
-
-        editor.setAsText("on");
-        {
-            Object value = editor.getValue();
-            assertTrue(value instanceof Boolean);
-            assertTrue((Boolean) value);
-        }
-
-        editor.setAsText("off");
-        {
-            Object value = editor.getValue();
-            assertTrue(value instanceof Boolean);
-            assertFalse((Boolean) value);
-        }
-
-        editor.setAsText("yes");
-        {
-            Object value = editor.getValue();
-            assertTrue(value instanceof Boolean);
-            assertTrue((Boolean) value);
-        }
-
-        editor.setAsText("no");
-        {
-            Object value = editor.getValue();
-            assertTrue(value instanceof Boolean);
-            assertFalse((Boolean) value);
-        }
-
-        editor.setAsText("1");
-        {
-            Object value = editor.getValue();
-            assertTrue(value instanceof Boolean);
-            assertTrue((Boolean) value);
-        }
-
-        editor.setAsText("0");
-        {
-            Object value = editor.getValue();
-            assertTrue(value instanceof Boolean);
-            assertFalse((Boolean) value);
-        }
+        assertBooleanResult(editor, "true", true);
+        assertBooleanResult(editor, "false", false);
+        assertBooleanResult(editor, "on", true);
+        assertBooleanResult(editor, "off", false);
+        assertBooleanResult(editor, "yes", true);
+        assertBooleanResult(editor, "no", false);
+        assertBooleanResult(editor, "1", true);
+        assertBooleanResult(editor, "0", false);
 
         // 边界条件
         editor.setAsText("");
         assertNull(editor.getValue());
 
-
         // 异常
         editor.setAsText("asc");
+    }
+
+    private void assertBooleanResult(CustomBooleanEditor editor, String text, boolean assertResult) {
+        editor.setAsText(text);
+        Object value = editor.getValue();
+        assertTrue(value instanceof Boolean);
+        if (assertResult) {
+            assertTrue((Boolean) value);
+        } else {
+            assertFalse((Boolean) value);
+        }
     }
 }
