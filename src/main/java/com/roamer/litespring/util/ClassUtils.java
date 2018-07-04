@@ -2,7 +2,7 @@ package com.roamer.litespring.util;
 
 
 /**
- * 抽象Class工具类
+ * Class工具类
  *
  * @author roamer
  * @version V1.0
