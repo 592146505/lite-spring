@@ -36,7 +36,7 @@ public class XmlBeanDefinitionReader {
 
     public static final String SCOPE_ATTRIBUTE = "scope";
 
-    public static final String PROPERRY_ELEMENT = "property";
+    public static final String PROPERTY_ELEMENT = "property";
 
     public static final String NAME_ATTRIBUTE = "name";
 
@@ -100,7 +100,7 @@ public class XmlBeanDefinitionReader {
      * @param bd
      */
     public void parsePropertyElement(Element beanElement, BeanDefinition bd) {
-        Iterator<Element> iterator = beanElement.elementIterator();
+        Iterator<Element> iterator = beanElement.elementIterator(PROPERTY_ELEMENT);
         while (iterator.hasNext()) {
             // property标签
             Element propertyElement = iterator.next();
