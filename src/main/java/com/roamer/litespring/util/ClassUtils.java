@@ -1,6 +1,9 @@
 package com.roamer.litespring.util;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Class工具类
  *
@@ -9,6 +12,35 @@ package com.roamer.litespring.util;
  * @date 2018/6/20 13:18
  */
 public abstract class ClassUtils {
+
+    /**
+     * Map with primitive wrapper type as key and corresponding primitive
+     * type as value, for example: Integer.class -> int.class.
+     */
+    private static final Map<Class<?>, Class<?>> WRAPPER_TO_PRIMITIVE_TYPE_MAP = new HashMap<>(8);
+
+    /**
+     * Map with primitive type as key and corresponding wrapper
+     * type as value, for example: int.class -> Integer.class.
+     */
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_TO_WRAPPER_MAP = new HashMap<>(8);
+
+    static {
+        WRAPPER_TO_PRIMITIVE_TYPE_MAP.put(Boolean.class, boolean.class);
+        WRAPPER_TO_PRIMITIVE_TYPE_MAP.put(Byte.class, byte.class);
+        WRAPPER_TO_PRIMITIVE_TYPE_MAP.put(Character.class, char.class);
+        WRAPPER_TO_PRIMITIVE_TYPE_MAP.put(Double.class, double.class);
+        WRAPPER_TO_PRIMITIVE_TYPE_MAP.put(Float.class, float.class);
+        WRAPPER_TO_PRIMITIVE_TYPE_MAP.put(Integer.class, int.class);
+        WRAPPER_TO_PRIMITIVE_TYPE_MAP.put(Long.class, long.class);
+        WRAPPER_TO_PRIMITIVE_TYPE_MAP.put(Short.class, short.class);
+
+        for (Map.Entry<Class<?>, Class<?>> entry : WRAPPER_TO_PRIMITIVE_TYPE_MAP.entrySet()) {
+            PRIMITIVE_TYPE_TO_WRAPPER_MAP.put(entry.getValue(), entry.getKey());
+        }
+
+    }
+
     /**
      * 获取 Default ClassLoader
      *
@@ -37,5 +69,42 @@ public abstract class ClassUtils {
             }
         }
         return cl;
+    }
+
+    /**
+     * value是否可转换为指定类型
+     *
+     * @param type
+     * @param value
+     * @return
+     */
+    public static boolean isAssignableValue(Class<?> type, Object value) {
+        Assert.notNull(type, "Type must not be null");
+        return (value != null ? isAssignable(type, value.getClass()) : !type.isPrimitive());
+    }
+
+    public static boolean isAssignable(Class<?> lhsType, Class<?> rhsType) {
+        Assert.notNull(lhsType, "Left-hand side type must not be null");
+        Assert.notNull(rhsType, "Right-hand side type must not be null");
+        // isAssignableFrom: 判定此 Class 对象所表示的类或接口与指定的 Class 参数所表示的类或接口是否相同，或是否是其超类或超接口。
+        // 子类可直接转换为超类类型
+        if (lhsType.isAssignableFrom(rhsType)) {
+            return true;
+        }
+        // isPrimitive: 判定该 Class 对象是否表示一个基本类型。
+        if (lhsType.isPrimitive()) {
+            // 基本类型需要转为对应的包装类型
+            Class<?> resolvedPrimitive = WRAPPER_TO_PRIMITIVE_TYPE_MAP.get(rhsType);
+            if (resolvedPrimitive != null && lhsType.equals(resolvedPrimitive)) {
+                return true;
+            }
+        } else {
+            // 对应包装类转为对应基本类型
+            Class<?> resolvedWrapper = PRIMITIVE_TYPE_TO_WRAPPER_MAP.get(rhsType);
+            if (resolvedWrapper != null && lhsType.isAssignableFrom(resolvedWrapper)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

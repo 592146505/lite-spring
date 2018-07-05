@@ -44,7 +44,7 @@ public class BeanDefinitionTest {
         // 获取PropertyValues
         List<PropertyValue> pvs = bd.getPropertyValues();
 
-        assertEquals(4, pvs.size());
+        assertEquals(5, pvs.size());
         // 断言PropertyValue
         {
             PropertyValue pv = getProperty(pvs, "accountDao");

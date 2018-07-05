@@ -33,5 +33,7 @@ public class ApplicationContextTest {
         assertTrue("roamer".equals(petStoreService.getOwner()));
 
         assertTrue(1 == petStoreService.getVersion());
+
+        assertTrue(1.0 == petStoreService.getMoney());
     }
 }

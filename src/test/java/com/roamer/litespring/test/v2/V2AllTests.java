@@ -16,7 +16,8 @@ import org.junit.runners.Suite;
         BeanDefinitionTest.class,
         BeanDefinitionResolverTest.class,
         CustomNumberEditorTest.class,
-        CustomBooleanEditorTest.class
+        CustomBooleanEditorTest.class,
+        TypeConverterTest.class
 })
 public class V2AllTests {
 }

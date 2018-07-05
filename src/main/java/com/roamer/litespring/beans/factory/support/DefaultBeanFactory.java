@@ -2,6 +2,7 @@ package com.roamer.litespring.beans.factory.support;
 
 import com.roamer.litespring.beans.BeanDefinition;
 import com.roamer.litespring.beans.PropertyValue;
+import com.roamer.litespring.beans.SimpleTypeConverter;
 import com.roamer.litespring.beans.factory.BeanCreationException;
 import com.roamer.litespring.beans.factory.config.ConfigurableBeanFactory;
 import com.roamer.litespring.util.ClassUtils;
@@ -96,6 +97,8 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
         }
 
         BeanDefinitionValueResolver resolver = new BeanDefinitionValueResolver(this);
+        // 类型转换器
+        SimpleTypeConverter converter = new SimpleTypeConverter();
         try {
             // 获取BeanInfo
             BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
@@ -109,7 +112,9 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
                 // 循环调用属性的set方法
                 for (PropertyDescriptor pd : pds) {
                     if (propertyName.equals(pd.getName())) {
-                        pd.getWriteMethod().invoke(bean, resolvedValue);
+                        // 将值转换为正确的可注入类型
+                        Object convertedValue = converter.convertIfNecessary(resolvedValue, pd.getPropertyType());
+                        pd.getWriteMethod().invoke(bean, convertedValue);
                     }
                 }
 
