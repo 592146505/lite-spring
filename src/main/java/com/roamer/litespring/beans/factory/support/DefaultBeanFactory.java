@@ -6,6 +6,7 @@ import com.roamer.litespring.beans.SimpleTypeConverter;
 import com.roamer.litespring.beans.factory.BeanCreationException;
 import com.roamer.litespring.beans.factory.config.ConfigurableBeanFactory;
 import com.roamer.litespring.util.ClassUtils;
+import org.apache.commons.beanutils.BeanUtils;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -61,7 +62,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
         // 创建Bean实例
         Object bean = instantiateBean(bd);
         // 设置Bean属性
-        populateBean(bd, bean);
+        populateBeanUseCommonsBeanUtils(bd, bean);
         return bean;
     }
 
@@ -85,7 +86,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
 
 
     /**
-     * 设置Bean字段
+     * 注入bean的字段值
      *
      * @param bd
      * @param bean
@@ -107,7 +108,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
             for (PropertyValue pv : values) {
                 String propertyName = pv.getName();
                 Object originalValue = pv.getValue();
-                // 得到转换后的Bean
+                // 得到转换后的值（如果时引用类型，则转换为具体的bean）
                 Object resolvedValue = resolver.resolveValueIfNecessary(originalValue);
                 // 循环调用属性的set方法
                 for (PropertyDescriptor pd : pds) {
@@ -118,6 +119,33 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
                     }
                 }
 
+            }
+        } catch (Exception e) {
+            throw new BeanCreationException("Failed to obtain BeanInfo for class [" + bean.getClass() + "]", e);
+        }
+    }
+
+    /**
+     * 使用Apache Commons BeanUtils对Bean进行属性注入
+     *
+     * @param bd
+     * @param bean
+     */
+    private void populateBeanUseCommonsBeanUtils(BeanDefinition bd, Object bean) {
+        List<PropertyValue> values = bd.getPropertyValues();
+        if (values == null || values.isEmpty()) {
+            return;
+        }
+
+        BeanDefinitionValueResolver resolver = new BeanDefinitionValueResolver(this);
+        try {
+            for (PropertyValue pv : values) {
+                String propertyName = pv.getName();
+                Object originalValue = pv.getValue();
+                // 得到转换后的值（如果时引用类型，则转换为具体的bean）
+                Object resolvedValue = resolver.resolveValueIfNecessary(originalValue);
+                // 使用Apache Commons BeanUtils对Bean进行属性注入
+                BeanUtils.setProperty(bean, propertyName, resolvedValue);
             }
         } catch (Exception e) {
             throw new BeanCreationException("Failed to obtain BeanInfo for class [" + bean.getClass() + "]", e);
