@@ -1,4 +1,4 @@
-package com.roamer.litespring.test.suite;
+package com.roamer.litespring.test;
 
 import com.roamer.litespring.test.v1.V1AllTests;
 import com.roamer.litespring.test.v2.V2AllTests;

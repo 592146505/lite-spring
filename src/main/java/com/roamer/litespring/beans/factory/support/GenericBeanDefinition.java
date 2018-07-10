@@ -1,6 +1,7 @@
 package com.roamer.litespring.beans.factory.support;
 
 import com.roamer.litespring.beans.BeanDefinition;
+import com.roamer.litespring.beans.ConstructorArgument;
 import com.roamer.litespring.beans.PropertyValue;
 
 import java.util.ArrayList;
@@ -25,7 +26,15 @@ public class GenericBeanDefinition implements BeanDefinition {
 
     private boolean prototype = false;
 
-    List<PropertyValue> propertyValues = new ArrayList<>();
+    /**
+     * set注入参数
+     */
+    private List<PropertyValue> propertyValues = new ArrayList<>();
+
+    /**
+     * 构造器注入参数
+     */
+    private ConstructorArgument constructorArgument = new ConstructorArgument();
 
     public GenericBeanDefinition(String id, String beanClassName) {
         this.id = id;
@@ -62,6 +71,16 @@ public class GenericBeanDefinition implements BeanDefinition {
     @Override
     public List<PropertyValue> getPropertyValues() {
         return propertyValues;
+    }
+
+    @Override
+    public ConstructorArgument getConstructorArgument() {
+        return constructorArgument;
+    }
+
+    @Override
+    public boolean hasConstructorArgumentValues() {
+        return !constructorArgument.isEmpty();
     }
 
 }

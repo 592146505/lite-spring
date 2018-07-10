@@ -58,4 +58,18 @@ public interface BeanDefinition {
      * @return
      */
     List<PropertyValue> getPropertyValues();
+
+    /**
+     * 获取构造器注入描述(constructor-arg)
+     *
+     * @return
+     */
+    ConstructorArgument getConstructorArgument();
+
+    /**
+     * 是否有构造器参数
+     *
+     * @return
+     */
+    boolean hasConstructorArgumentValues();
 }

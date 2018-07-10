@@ -5,7 +5,7 @@ import com.roamer.litespring.beans.factory.config.RuntimeBeanReference;
 import com.roamer.litespring.beans.factory.config.TypeStringValue;
 
 /**
- * Bean子标签值解析
+ * Bean子标签值 解析器
  *
  * @author roamer
  * @version V1.0
@@ -23,18 +23,19 @@ public class BeanDefinitionValueResolver {
      * 根据子标签值进行转换
      *
      * @param value 子标签值定义
-     * @return Bean实例
+     * @return 转换后值
      */
     public Object resolveValueIfNecessary(Object value) {
         if (value instanceof RuntimeBeanReference) {
-            // 如果是引用类型，则转换为RuntimeBeanReference，并根据其beanName字段从Bean工厂中查找Bean
+            // 引用类型(ref) RuntimeBeanReference，并根据其beanName字段从Bean工厂中查找Bean
             RuntimeBeanReference reference = (RuntimeBeanReference) value;
             String beanName = reference.getBeanName();
             return factory.getBean(beanName);
         } else if (value instanceof TypeStringValue) {
+            // 字符型(value) TypeStringValue
             return ((TypeStringValue) value).getValue();
         } else {
-            //TODO 未实现类型
+            // TODO 未实现类型
             throw new RuntimeException("the value " + value + " has not implemented");
         }
     }
