@@ -18,6 +18,13 @@ public interface BeanDefinition {
     String SCOPE_DEFAULT = "";
 
     /**
+     * 获取BeanId
+     *
+     * @return
+     */
+    String getId();
+
+    /**
      * 获取Bean全限定类名
      *
      * @return
@@ -72,4 +79,6 @@ public interface BeanDefinition {
      * @return
      */
     boolean hasConstructorArgumentValues();
+
+
 }

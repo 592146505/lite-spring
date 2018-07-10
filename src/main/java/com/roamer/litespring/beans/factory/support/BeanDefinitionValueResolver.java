@@ -5,7 +5,7 @@ import com.roamer.litespring.beans.factory.config.RuntimeBeanReference;
 import com.roamer.litespring.beans.factory.config.TypeStringValue;
 
 /**
- * Bean子标签值 解析器
+ * BeanDefinition 值 解析器
  *
  * @author roamer
  * @version V1.0
@@ -20,10 +20,10 @@ public class BeanDefinitionValueResolver {
     }
 
     /**
-     * 根据子标签值进行转换
+     * 解析 BeanDefinition 值(value/ref)
      *
-     * @param value 子标签值定义
-     * @return 转换后值
+     * @param value 值定义
+     * @return 解析后的值，bean实例或字符等
      */
     public Object resolveValueIfNecessary(Object value) {
         if (value instanceof RuntimeBeanReference) {

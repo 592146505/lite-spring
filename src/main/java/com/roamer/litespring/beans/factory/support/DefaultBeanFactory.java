@@ -62,7 +62,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
         // 创建Bean实例
         Object bean = instantiateBean(bd);
         // 设置Bean属性
-        populateBeanUseCommonsBeanUtils(bd, bean);
+        populateBean(bd, bean);
         return bean;
     }
 
@@ -73,14 +73,21 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
      * @return
      */
     private Object instantiateBean(BeanDefinition bd) {
-        ClassLoader cl = getClassLoader();
-        String beanClassName = bd.getBeanClassName();
-        try {
-            // 反射获取类
-            Class<?> clz = cl.loadClass(beanClassName);
-            return clz.newInstance();
-        } catch (Exception e) {
-            throw new BeanCreationException("create bean for " + beanClassName + " failed", e);
+        if (bd.hasConstructorArgumentValues()) {
+            // 优先使用构造函数注入方式
+            ConstructorResolver resolver = new ConstructorResolver(this);
+            return resolver.autowireConstructor(bd);
+        } else {
+            // 属性注入
+            ClassLoader cl = getClassLoader();
+            String beanClassName = bd.getBeanClassName();
+            try {
+                // 反射获取类
+                Class<?> clz = cl.loadClass(beanClassName);
+                return clz.newInstance();
+            } catch (Exception e) {
+                throw new BeanCreationException("create bean for " + beanClassName + " failed", e);
+            }
         }
     }
 

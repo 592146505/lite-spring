@@ -50,11 +50,23 @@ public class ConstructorArgument {
     }
 
     /**
+     * 获取构造器注入参数个数
+     *
+     * @return
+     */
+    public int getArgumentCount() {
+        return valueHolders.size();
+    }
+
+    /**
      * 每个ValueHolder都是一个构造器注入参数定义
      */
     public static class ValueHolder {
         private String name;
         private String type;
+        /**
+         * 引用类型或字符型
+         */
         private Object value;
 
         public ValueHolder(Object value) {

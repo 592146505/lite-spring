@@ -42,6 +42,11 @@ public class GenericBeanDefinition implements BeanDefinition {
     }
 
     @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
     public String getBeanClassName() {
         return beanClassName;
     }
