@@ -4,6 +4,7 @@ import com.roamer.litespring.beans.BeanDefinition;
 import com.roamer.litespring.beans.ConstructorArgument;
 import com.roamer.litespring.beans.PropertyValue;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class GenericBeanDefinition implements BeanDefinition {
     private String id;
 
     private String beanClassName;
+
+    private SoftReference<Class> beanClass;
 
     private String scope = SCOPE_DEFAULT;
 
@@ -49,6 +52,16 @@ public class GenericBeanDefinition implements BeanDefinition {
     @Override
     public String getBeanClassName() {
         return beanClassName;
+    }
+
+    @Override
+    public Class getBeanClass() {
+        return beanClass == null ? null : beanClass.get();
+    }
+
+    @Override
+    public void setBeanClass(Class beanClass) {
+        this.beanClass = new SoftReference<>(beanClass);
     }
 
     @Override

@@ -42,11 +42,16 @@ public class ConstructorResolver {
         // 可注入的参数
         Object[] argsToUse = null;
 
-        Class beanClass;
-        try {
-            beanClass = beanFactory.getClassLoader().loadClass(bd.getBeanClassName());
-        } catch (ClassNotFoundException e) {
-            throw new BeanCreationException(bd.getId(), "Instantiation of bean failed, can't resolve class", e);
+        // 如果加载过，则直接获取
+        Class beanClass = bd.getBeanClass();
+        if (beanClass == null) {
+            try {
+                beanClass = beanFactory.getClassLoader().loadClass(bd.getBeanClassName());
+                // 加载过后，放入缓存
+                bd.setBeanClass(beanClass);
+            } catch (ClassNotFoundException e) {
+                throw new BeanCreationException(bd.getId(), "Instantiation of bean failed, can't resolve class", e);
+            }
         }
 
         // 获取beanClass所有公共构造方法

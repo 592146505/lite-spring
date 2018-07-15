@@ -32,51 +32,65 @@ public interface BeanDefinition {
     String getBeanClassName();
 
     /**
+     * 获取Bean Class对象
+     *
+     * @return Bean Class
+     */
+    Class getBeanClass();
+
+    /**
+     * 赋值Bean Class对象
+     *
+     * @param beanClass
+     */
+    void setBeanClass(Class beanClass);
+
+    /**
      * 断言为单例模式
      *
-     * @return
+     * @return 单例:true 其他:false
      */
     boolean isSingleton();
 
     /**
      * 断言为原型模式
      *
-     * @return
+     * @return 原型:true 其他:false
      */
     boolean isPrototype();
 
     /**
      * 获取Bean作用域
      *
-     * @return
+     * @return scope值
      */
     String getScope();
 
     /**
      * 设置Bean作用域
      *
-     * @param scope
+     * @param scope scope值
      */
     void setScope(String scope);
 
     /**
      * 获取Bean Property
      *
-     * @return
+     * @return property定义
      */
     List<PropertyValue> getPropertyValues();
 
     /**
      * 获取构造器注入描述(constructor-arg)
      *
-     * @return
+     * @return constructor定义
      */
     ConstructorArgument getConstructorArgument();
 
     /**
-     * 是否有构造器参数
+     * 断言有定义 构造函数 参数注入
      *
-     * @return
+     * @return 有:true 无:false
      */
     boolean hasConstructorArgumentValues();
 
