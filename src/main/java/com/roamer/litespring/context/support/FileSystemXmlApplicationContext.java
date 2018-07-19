@@ -1,7 +1,7 @@
 package com.roamer.litespring.context.support;
 
 import com.roamer.litespring.core.io.Resource;
-import com.roamer.litespring.core.io.support.FileSystemResource;
+import com.roamer.litespring.core.io.FileSystemResource;
 
 /**
  * 文件系统XML Bean容器

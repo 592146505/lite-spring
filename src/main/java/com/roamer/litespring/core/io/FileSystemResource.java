@@ -1,6 +1,5 @@
-package com.roamer.litespring.core.io.support;
+package com.roamer.litespring.core.io;
 
-import com.roamer.litespring.core.io.Resource;
 import com.roamer.litespring.util.Assert;
 
 import java.io.*;
@@ -14,11 +13,19 @@ import java.io.*;
  */
 public class FileSystemResource implements Resource {
 
-    private File file;
+    private final String path;
+    private final File file;
 
     public FileSystemResource(String path) {
         Assert.notNull(path, "Path must not be null");
+        this.path = path;
         file = new File(path);
+    }
+
+    public FileSystemResource(File file) {
+        Assert.notNull(file, "File must not be null");
+        this.file = file;
+        path = file.getPath();
     }
 
 

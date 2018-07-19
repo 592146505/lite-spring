@@ -1,6 +1,5 @@
-package com.roamer.litespring.core.io.support;
+package com.roamer.litespring.core.io;
 
-import com.roamer.litespring.core.io.Resource;
 import com.roamer.litespring.util.ClassUtils;
 
 import java.io.FileNotFoundException;
@@ -16,9 +15,9 @@ import java.io.InputStream;
  */
 public class ClassPathResource implements Resource {
 
-    private String path;
+    private final String path;
 
-    private ClassLoader classLoader;
+    private final ClassLoader classLoader;
 
     public ClassPathResource(String path) {
         this(path, null);

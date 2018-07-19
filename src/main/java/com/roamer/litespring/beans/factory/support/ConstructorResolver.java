@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class ConstructorResolver {
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    private static final Log logger = LogFactory.getLog(ConstructorResolver.class);
 
     private final ConfigurableBeanFactory beanFactory;
 

@@ -5,7 +5,7 @@ import com.roamer.litespring.beans.factory.BeanCreationException;
 import com.roamer.litespring.beans.factory.BeanDefinitionStoreException;
 import com.roamer.litespring.beans.factory.support.DefaultBeanFactory;
 import com.roamer.litespring.beans.factory.xml.XmlBeanDefinitionReader;
-import com.roamer.litespring.core.io.support.ClassPathResource;
+import com.roamer.litespring.core.io.ClassPathResource;
 import com.roamer.litespring.service.v1.PetStoreService;
 import org.junit.After;
 import org.junit.Before;

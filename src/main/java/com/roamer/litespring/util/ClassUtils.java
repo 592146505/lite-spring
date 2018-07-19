@@ -14,6 +14,16 @@ import java.util.Map;
 public abstract class ClassUtils {
 
     /**
+     * The package separator character: '.'
+     */
+    private static final char PACKAGE_SEPARATOR = '.';
+
+    /**
+     * The path separator character: '/'
+     */
+    private static final char PATH_SEPARATOR = '/';
+
+    /**
      * Map with primitive wrapper type as key and corresponding primitive
      * type as value, for example: Integer.class -> int.class.
      */
@@ -44,7 +54,7 @@ public abstract class ClassUtils {
     /**
      * 获取 Default ClassLoader
      *
-     * @return
+     * @return 一个可用的ClassLoader
      */
     public static ClassLoader getDefaultClassLoader() {
         ClassLoader cl = null;
@@ -74,8 +84,8 @@ public abstract class ClassUtils {
     /**
      * value是否可转换为指定类型
      *
-     * @param type
-     * @param value
+     * @param type  需要转换的类型
+     * @param value 值
      * @return
      */
     public static boolean isAssignableValue(Class<?> type, Object value) {
@@ -106,5 +116,27 @@ public abstract class ClassUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * 将资源路径转换为class路径
+     *
+     * @param resourcePath 资源路径 以.分割
+     * @return class路径 以/分隔
+     */
+    public static String convertResourcePathToClassName(String resourcePath) {
+        Assert.notNull(resourcePath, "Resource path must not be null");
+        return resourcePath.replace(PATH_SEPARATOR, PACKAGE_SEPARATOR);
+    }
+
+    /**
+     * 将class路径转换为资源路径
+     *
+     * @param className class路径 以/分隔
+     * @return 资源路径 以.分割
+     */
+    public static String convertClassNameToResourcePath(String className) {
+        Assert.notNull(className, "Class name must not be null");
+        return className.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR);
     }
 }

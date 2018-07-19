@@ -1,8 +1,8 @@
 package com.roamer.litespring.test.v1;
 
 import com.roamer.litespring.core.io.Resource;
-import com.roamer.litespring.core.io.support.ClassPathResource;
-import com.roamer.litespring.core.io.support.FileSystemResource;
+import com.roamer.litespring.core.io.ClassPathResource;
+import com.roamer.litespring.core.io.FileSystemResource;
 import org.junit.Test;
 
 import java.io.InputStream;

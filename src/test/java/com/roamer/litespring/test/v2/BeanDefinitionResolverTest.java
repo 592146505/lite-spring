@@ -5,7 +5,7 @@ import com.roamer.litespring.beans.factory.config.TypeStringValue;
 import com.roamer.litespring.beans.factory.support.BeanDefinitionValueResolver;
 import com.roamer.litespring.beans.factory.support.DefaultBeanFactory;
 import com.roamer.litespring.beans.factory.xml.XmlBeanDefinitionReader;
-import com.roamer.litespring.core.io.support.ClassPathResource;
+import com.roamer.litespring.core.io.ClassPathResource;
 import com.roamer.litespring.dao.v2.AccountDao;
 import org.junit.After;
 import org.junit.Before;

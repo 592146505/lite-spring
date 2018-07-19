@@ -4,7 +4,7 @@ import com.roamer.litespring.beans.BeanDefinition;
 import com.roamer.litespring.beans.factory.support.ConstructorResolver;
 import com.roamer.litespring.beans.factory.support.DefaultBeanFactory;
 import com.roamer.litespring.beans.factory.xml.XmlBeanDefinitionReader;
-import com.roamer.litespring.core.io.support.ClassPathResource;
+import com.roamer.litespring.core.io.ClassPathResource;
 import com.roamer.litespring.dao.v3.AccountDao;
 import com.roamer.litespring.dao.v3.ItemDao;
 import com.roamer.litespring.service.v3.PetStoreService;

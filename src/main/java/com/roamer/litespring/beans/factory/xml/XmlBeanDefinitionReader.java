@@ -29,7 +29,7 @@ import java.util.Iterator;
  */
 public class XmlBeanDefinitionReader {
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    private static final Log logger = LogFactory.getLog(XmlBeanDefinitionReader.class);
 
     public static final String ID_ATTRIBUTE = "id";
 
