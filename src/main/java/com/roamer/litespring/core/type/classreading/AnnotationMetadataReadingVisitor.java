@@ -1,6 +1,6 @@
 package com.roamer.litespring.core.type.classreading;
 
-import com.roamer.litespring.core.type.AnnotationAttributes;
+import com.roamer.litespring.core.annotation.AnnotationAttributes;
 import com.roamer.litespring.core.type.AnnotationMetadata;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Type;

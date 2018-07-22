@@ -1,7 +1,7 @@
 package com.roamer.litespring.test.v4;
 
 import com.roamer.litespring.core.io.ClassPathResource;
-import com.roamer.litespring.core.type.AnnotationAttributes;
+import com.roamer.litespring.core.annotation.AnnotationAttributes;
 import com.roamer.litespring.core.type.classreading.AnnotationMetadataReadingVisitor;
 import com.roamer.litespring.core.type.classreading.ClassMetadataReadingVisitor;
 import org.junit.After;

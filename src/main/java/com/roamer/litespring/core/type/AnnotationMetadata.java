@@ -1,5 +1,7 @@
 package com.roamer.litespring.core.type;
 
+import com.roamer.litespring.core.annotation.AnnotationAttributes;
+
 import java.util.Set;
 
 /**
@@ -9,7 +11,7 @@ import java.util.Set;
  * @version V1.0
  * @date 2018/7/21 15:44
  */
-public interface AnnotationMetadata {
+public interface AnnotationMetadata extends ClassMetadata {
 
     /**
      * 是否包含指定注解
@@ -30,7 +32,7 @@ public interface AnnotationMetadata {
     /**
      * 获取注解类型
      *
-     * @return 该类上注解类型
+     * @return 该类上所有注解类型
      */
     Set<String> getAnnotationTypes();
 }

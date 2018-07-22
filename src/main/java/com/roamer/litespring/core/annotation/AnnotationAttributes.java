@@ -1,4 +1,4 @@
-package com.roamer.litespring.core.type;
+package com.roamer.litespring.core.annotation;
 
 import com.roamer.litespring.util.Assert;
 
