@@ -127,7 +127,7 @@ public class PackageResourceLoader {
                             "] because the application is not allowed to read the directory");
                 } else {
                     // 递归查找
-                    doRetrieveMatchingFile(directory, resultFiles);
+                    doRetrieveMatchingFile(content, resultFiles);
                 }
             } else {
                 // 文件
