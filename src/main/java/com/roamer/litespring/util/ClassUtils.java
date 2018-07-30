@@ -24,6 +24,16 @@ public abstract class ClassUtils {
     private static final char PATH_SEPARATOR = '/';
 
     /**
+     * The inner class separator character: '$'
+     */
+    private static final char INNER_CLASS_SEPARATOR = '$';
+
+    /**
+     * The CGLIB class separator: "$$"
+     */
+    public static final String CGLIB_CLASS_SEPARATOR = "$$";
+
+    /**
      * Map with primitive wrapper type as key and corresponding primitive
      * type as value, for example: Integer.class -> int.class.
      */
@@ -138,5 +148,22 @@ public abstract class ClassUtils {
     public static String convertClassNameToResourcePath(String className) {
         Assert.notNull(className, "Class name must not be null");
         return className.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR);
+    }
+
+    /**
+     * 获取类名称（非全路径名）
+     *
+     * @param className 类全路径名
+     * @return 类名称（非全路径名）
+     */
+    public static String getShortName(String className) {
+        int lastDotIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
+        int nameEndIndex = className.indexOf(CGLIB_CLASS_SEPARATOR);
+        if (nameEndIndex == -1) {
+            nameEndIndex = className.length();
+        }
+        String shortName = className.substring(lastDotIndex + 1, nameEndIndex);
+        shortName = shortName.replace(INNER_CLASS_SEPARATOR, PACKAGE_SEPARATOR);
+        return shortName;
     }
 }

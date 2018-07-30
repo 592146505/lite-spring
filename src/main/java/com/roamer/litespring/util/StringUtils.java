@@ -1,5 +1,10 @@
 package com.roamer.litespring.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.StringTokenizer;
+
 /**
  * String 工具类
  *
@@ -78,5 +83,58 @@ public abstract class StringUtils {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * 将字符串以指定字符分割为数组
+     *
+     * @param str        目标字符串
+     * @param delimiters 分隔符
+     * @return 分割后的数组
+     */
+    public static String[] tokenizeToStringArray(String str, String delimiters) {
+        return tokenizeToStringArray(str, delimiters, true, true);
+    }
+
+    /**
+     * 将字符串以指定字符分割为数组
+     *
+     * @param str               目标字符串
+     * @param delimiters        分隔符
+     * @param trimTokens        是否消除空格
+     * @param ignoreEmptyTokens 是否忽略空白元素
+     * @return 分割后的数组
+     */
+    public static String[] tokenizeToStringArray(
+            String str, String delimiters, boolean trimTokens, boolean ignoreEmptyTokens) {
+
+        if (str == null) {
+            return null;
+        }
+        StringTokenizer st = new StringTokenizer(str, delimiters);
+        List<String> tokens = new ArrayList<>();
+        while (st.hasMoreTokens()) {
+            String token = st.nextToken();
+            if (trimTokens) {
+                token = token.trim();
+            }
+            if (!ignoreEmptyTokens || token.length() > 0) {
+                tokens.add(token);
+            }
+        }
+        return toStringArray(tokens);
+    }
+
+    /**
+     * 将字符串集合转为数组
+     *
+     * @param collection 源集合
+     * @return 字符串数组
+     */
+    public static String[] toStringArray(Collection<String> collection) {
+        if (collection == null) {
+            return null;
+        }
+        return collection.toArray(new String[collection.size()]);
     }
 }

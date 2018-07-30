@@ -68,9 +68,10 @@ public class XmlBeanDefinitionReader {
             SAXReader reader = new SAXReader();
             Document doc = reader.read(is);
 
-            // 获取遍历子节点
+            // <beans>
             Element rootElement = doc.getRootElement();
             Iterator<Element> iterator = rootElement.elementIterator();
+            // 遍历子节点
             while (iterator.hasNext()) {
                 Element el = iterator.next();
                 // 获取id和class
