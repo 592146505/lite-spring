@@ -8,6 +8,7 @@ import com.roamer.litespring.beans.factory.config.RuntimeBeanReference;
 import com.roamer.litespring.beans.factory.config.TypeStringValue;
 import com.roamer.litespring.beans.factory.support.BeanDefinitionRegistry;
 import com.roamer.litespring.beans.factory.support.GenericBeanDefinition;
+import com.roamer.litespring.context.annotation.ClassPathBeanDefinitionScanner;
 import com.roamer.litespring.core.io.Resource;
 import com.roamer.litespring.util.StringUtils;
 import org.apache.commons.logging.Log;
@@ -49,6 +50,12 @@ public class XmlBeanDefinitionReader {
 
     public static final String TYPE_ATTRIBUTE = "type";
 
+    public static final String BEANS_NAMESPACE_URI = "http://www.springframework.org/schema/beans";
+
+    public static final String CONTEXT_NAMESPACE_URI = "http://www.springframework.org/schema/context";
+
+    private static final String BASE_PACKAGE_ATTRIBUTE = "base-package";
+
     BeanDefinitionRegistry registry;
 
     public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
@@ -74,21 +81,15 @@ public class XmlBeanDefinitionReader {
             // 遍历子节点
             while (iterator.hasNext()) {
                 Element el = iterator.next();
-                // 获取id和class
-                String id = el.attributeValue(ID_ATTRIBUTE);
-                String beanClassName = el.attributeValue(CLASS_ATTRIBUTE);
-                // 封装为beanDefinition
-                BeanDefinition bd = new GenericBeanDefinition(id, beanClassName);
-                // 设置scope属性
-                if (el.attributeValue(SCOPE_ATTRIBUTE) != null) {
-                    bd.setScope(el.attributeValue(SCOPE_ATTRIBUTE));
+                // 获取所属标签namespaceURI
+                String namespaceURI = el.getNamespaceURI();
+                if (isDefaultNamespace(namespaceURI)) {
+                    // <bean>标签定义的
+                    parseDefaultElement(el);
+                } else if (isContextNamespace(namespaceURI)) {
+                    // <context:component-scan>
+                    parseComponentElement(el);
                 }
-                // 解析 constructor-arg
-                parseConstructorArgElements(el, bd);
-                // 解析 property
-                parsePropertyElement(el, bd);
-                // 注册BeanDefinition
-                registry.registerBeanDefinition(id, bd);
             }
         } catch (Exception e) {
             throw new BeanDefinitionStoreException("IOException parsing XML document from " + resource.getDescription(), e);
@@ -101,6 +102,63 @@ public class XmlBeanDefinitionReader {
                 }
             }
         }
+    }
+
+
+    /**
+     * 默认定义方式
+     *
+     * @param el {<bean>}
+     */
+    private void parseDefaultElement(Element el) {
+        // 获取id和class
+        String id = el.attributeValue(ID_ATTRIBUTE);
+        String beanClassName = el.attributeValue(CLASS_ATTRIBUTE);
+        // 封装为beanDefinition
+        BeanDefinition bd = new GenericBeanDefinition(id, beanClassName);
+        // 设置scope属性
+        if (el.attributeValue(SCOPE_ATTRIBUTE) != null) {
+            bd.setScope(el.attributeValue(SCOPE_ATTRIBUTE));
+        }
+        // 解析 constructor-arg
+        parseConstructorArgElements(el, bd);
+        // 解析 property
+        parsePropertyElement(el, bd);
+        // 注册BeanDefinition
+        registry.registerBeanDefinition(id, bd);
+    }
+
+    /**
+     * component-scan
+     *
+     * @param el <context:component-scan>
+     */
+    private void parseComponentElement(Element el) {
+        // 获取到 base-package 属性
+        String basePackages = el.attributeValue(BASE_PACKAGE_ATTRIBUTE);
+        // 扫描
+        ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry);
+        scanner.doScan(basePackages);
+    }
+
+    /**
+     * 是否为默认Namespace
+     *
+     * @param namespaceUri
+     * @return
+     */
+    public boolean isDefaultNamespace(String namespaceUri) {
+        return (!StringUtils.hasLength(namespaceUri) || BEANS_NAMESPACE_URI.equals(namespaceUri));
+    }
+
+    /**
+     * 是否为Context Namespace
+     *
+     * @param namespaceUri
+     * @return
+     */
+    public boolean isContextNamespace(String namespaceUri) {
+        return (!StringUtils.hasLength(namespaceUri) || CONTEXT_NAMESPACE_URI.equals(namespaceUri));
     }
 
     /**
